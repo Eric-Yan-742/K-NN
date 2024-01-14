@@ -2,6 +2,7 @@
 K Nearest Neighbours Model
 """
 import numpy as np
+from statistics import mode
 
 
 class KNN(object):
@@ -45,7 +46,23 @@ class KNN(object):
             distance = self.calc_dis_two_loop(x_test)
 
         # TODO: implement me
-        pass
+        result = np.empty(x_test.shape[0])
+        for i, row in enumerate(distance):
+            disToLabel = {}
+            # Map each distance to its label
+            for j in range(len(row)):
+                disToLabel[row[j]] = self._y_train[j]
+            # Get the smallest k distances
+            smallest_k = np.partition(row, k_test)[:k_test]
+            # Convert the distances to their labels
+            labels = np.empty(len(smallest_k))
+            for j in range(len(smallest_k)):
+                labels[j] = disToLabel[smallest_k[j]]
+            # Get the majority label
+            majorityLabel = mode(labels)
+            # Record the majority label
+            result[i] = majorityLabel
+        return result
 
     def calc_dis_one_loop(self, x_test: np.ndarray):
         """
@@ -58,7 +75,11 @@ class KNN(object):
         """
 
         # TODO: implement me
-        pass
+        distance = np.empty((x_test.shape[0], self._x_train.shape[0]))
+        for i, testImage in enumerate(x_test):
+            # Calculate all differences for each test image
+            distance[i] = np.linalg.norm(testImage - self._x_train, axis=1)
+        return distance
 
     def calc_dis_two_loop(self, x_test: np.ndarray):
         """
@@ -70,4 +91,9 @@ class KNN(object):
             x_test: Test samples; np.ndarray with shape (N, D)
         """
         # TODO: implement me
-        pass
+        distance = np.empty((x_test.shape[0], self._x_train.shape[0]))
+        for i, testImage in enumerate(x_test):
+            for j, trainImage in enumerate(self._x_train):
+                # Calculate the Euclidean Distance between images
+                distance[i, j] = np.linalg.norm(testImage - trainImage)
+        return distance
