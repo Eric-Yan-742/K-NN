@@ -23,7 +23,7 @@ class KNN(object):
         self._y_train = y_train
         self.k = k
 
-    def predict(self, x_test: np.ndarray, k: int = None, loop_count: int = 1):
+    def predict(self, x_test: np.ndarray, k: int = None, loop_count: int = 1) -> np.ndarray:
         """
         Use the contained training set to predict labels for test samples
 
@@ -64,7 +64,7 @@ class KNN(object):
             result[i] = majorityLabel
         return result
 
-    def calc_dis_one_loop(self, x_test: np.ndarray):
+    def calc_dis_one_loop(self, x_test: np.ndarray) -> np.ndarray:
         """
         Calculate distance between training samples and test samples
 
@@ -72,6 +72,11 @@ class KNN(object):
 
         Parameters:
             x_test: Test samples; np.ndarray with shape (N, D)
+        Returns:
+            suppose self._x_train has n rows. the function returns
+                a np.ndarray with shape (N, n). Each element (i,j)
+                is the Euclidean distance between testIamge_i and
+                trainImage_j.
         """
 
         # TODO: implement me
@@ -81,7 +86,7 @@ class KNN(object):
             distance[i] = np.linalg.norm(testImage - self._x_train, axis=1)
         return distance
 
-    def calc_dis_two_loop(self, x_test: np.ndarray):
+    def calc_dis_two_loop(self, x_test: np.ndarray) -> np.ndarray:
         """
         Calculate distance between training samples and test samples
 
@@ -89,6 +94,11 @@ class KNN(object):
 
         Parameters:
             x_test: Test samples; np.ndarray with shape (N, D)
+        Returns:
+            suppose self._x_train has n rows. the function returns
+                a np.ndarray with shape (N, n). Each element (i,j)
+                is the Euclidean distance between testIamge_i and
+                trainImage_j.
         """
         # TODO: implement me
         distance = np.empty((x_test.shape[0], self._x_train.shape[0]))
